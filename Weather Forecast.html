@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather City Forecast</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <style>
+
+    .container {
+      margin-top: 50px;
+    }
+    .card-panel {
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .weather-info {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col s12">
+        <h3>Weather City Forecast</h3>
+        <div class="input-field col s8">
+          <input id="cityNameInput" type="text" class="validate">
+          <label for="cityNameInput">Enter City Name</label>
+        </div>
+        <div class="input-field col s4">
+          <button class="btn waves-effect waves-light" type="button" onclick="fetchWeather()">Get Temperature
+            <!-- <i class="material-icons right"></i> -->
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="row weather-info" id="weatherInfo" style="display: none;">
+      <div class="col s12">
+        <div class="card-panel">
+          <h5 id="cityName"></h5>
+          <p id="temperature"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+    // Function to fetch weather data
+    function fetchWeather() {
+        const apiKey = '92d6019a0c65e40cb4891e875db2039f';
+        const cityName = document.getElementById('cityNameInput').value;
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}&units=metric`;
+       
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                displayWeather(data);
+            })
+            .catch(error => {
+                console.error('Error fetching data: ', error);
+                document.getElementById('weatherInfo').style.display = 'none';
+            });
+    }
+   
+    function displayWeather(data) {
+        document.getElementById('cityName').innerText = data.name;
+        document.getElementById('temperature').innerText = `Temperature: ${data.main.temp} °C`;
+        document.getElementById('weatherInfo').style.display = 'block';
+    }    
+  </script>
+</body>
+</html>
